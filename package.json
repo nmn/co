@@ -1,6 +1,6 @@
 {
   "name": "co-effects",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "description": "generator async control flow goodness",
   "keywords": [
     "async",
@@ -27,12 +27,12 @@
     "index.js"
   ],
   "license": "MIT",
-  "repository": "tj/co",
+  "repository": "nmn/co",
   "engines": {
     "iojs": ">= 1.0.0",
     "node": ">= 0.12.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "redux-saga": "^0.12.0"
   }
 }
