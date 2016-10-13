@@ -1,4 +1,9 @@
-4.6.0 / 2015-07-09
+4.6.1 / effects - 2016-10-13
+
+ * fix issue with cps handling
+ * fix failing tests
+
+4.6.0 / co - 2015-07-09 / effects - 2016-10-13
 ==================
 
  * support passing the rest of the arguments to co into the generator
@@ -7,6 +12,13 @@
  function *gen(...args) { }
  co(gen, ...args);
  ```
+
+### Effects
+
+ * Added supports for the following effects from `redux-saga/effects`
+   * call
+   * cps
+   * race
 
 4.5.0 / 2015-03-17
 ==================

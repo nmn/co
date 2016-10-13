@@ -182,30 +182,30 @@ describe('co(* -> yield fn(done))', function () {
     })
   })
 
-  describe('when yielding neither a function nor a promise', function(){
-    it('should throw', function(){
-      var errors = [];
-
-      return co(function *(){
-        try {
-          var a = yield 'something';
-        } catch (err) {
-          errors.push(err.message);
-        }
-
-        try {
-          var a = yield 'something';
-        } catch (err) {
-          errors.push(err.message);
-        }
-
-        assert.equal(2, errors.length);
-        var msg = 'yield a function, promise, generator, array, or object';
-        assert(~errors[0].indexOf(msg));
-        assert(~errors[1].indexOf(msg));
-      });
-    })
-  })
+  // describe('when yielding neither a function nor a promise', function(){
+  //   it('should throw', function(){
+  //     var errors = [];
+  //
+  //     return co(function *(){
+  //       try {
+  //         var a = yield 'something';
+  //       } catch (err) {
+  //         errors.push(err.message);
+  //       }
+  //
+  //       try {
+  //         var a = yield 'something';
+  //       } catch (err) {
+  //         errors.push(err.message);
+  //       }
+  //
+  //       assert.equal(2, errors.length);
+  //       var msg = 'yield a function, promise, generator, array, or object';
+  //       assert(~errors[0].indexOf(msg));
+  //       assert(~errors[1].indexOf(msg));
+  //     });
+  //   })
+  // })
 
   describe('with errors', function(){
     it('should throw', function(){

@@ -115,12 +115,13 @@ function co(gen) {
 
 function toPromise(obj) {
   if (!obj) return obj;
+  obj = resolveSagaEffect.call(this, obj);
   if (isPromise(obj)) return obj;
   if (isGeneratorFunction(obj) || isGenerator(obj)) return co.call(this, obj);
   if ('function' == typeof obj) return thunkToPromise.call(this, obj);
   if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
   if (isObject(obj)) return objectToPromise.call(this, obj);
-  return obj;
+  return Promise.resolve(obj);
 }
 
 /**
@@ -218,7 +219,7 @@ function isGenerator(obj) {
  * @return {Boolean}
  * @api private
  */
- 
+
 function isGeneratorFunction(obj) {
   var constructor = obj.constructor;
   if (!constructor) return false;
@@ -236,4 +237,91 @@ function isGeneratorFunction(obj) {
 
 function isObject(val) {
   return Object == val.constructor;
+}
+
+/**
+ * Resolves Saga Effects into values co understands.
+ * Currently supports `call`, `cps` and `race`
+ *
+ * All three effects have no counter-part in `co`
+ *
+ * @param {Mixed} obj
+ * @return {Mixed}
+ * @api private
+ */
+
+function resolveSagaEffect(obj) {
+  if (isSagaCall(obj)) {
+    return obj.CALL.fn.apply(obj.CALL.context || this, obj.CALL.args);
+  }
+  if (isSagaCPS(obj)) {
+    const that = this
+    return new Promise(function(resolve, reject) {
+      obj.CPS.fn.apply(
+        obj.CPS.context || that,
+        obj.CPS.args.concat([function(err, value) {
+          if (err) return reject(err);
+          resolve(value);
+        }])
+      );
+    });
+  }
+  if (isSagaRace(obj)) {
+    return Promise.race(obj.RACE.map(resolveSagaEffect, this));
+  }
+  return obj;
+}
+
+/**
+ * Check for an effect from redux-saga
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isSagaEffect(obj) {
+  return typeof obj === 'object'
+    && obj['@@redux-saga/IO'];
+}
+
+/**
+ * Check for a `CALL` effect from redux-saga
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isSagaCall(obj) {
+  return isSagaEffect(obj)
+    && obj.CALL
+    && typeof obj.CALL.fn === 'function';
+}
+
+/**
+ * Check for a `CPS` effect from redux-saga
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isSagaCPS(obj) {
+  return isSagaEffect(obj)
+    && obj.CPS
+    && typeof obj.CPS.fn === 'function';
+}
+
+/**
+ * Check for a `RACE` effect from redux-saga
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isSagaRace(obj) {
+  return isSagaEffect(obj)
+    && Array.isArray(obj.RACE);
 }

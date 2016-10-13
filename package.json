@@ -1,6 +1,6 @@
 {
-  "name": "co",
-  "version": "4.6.0",
+  "name": "co-effects",
+  "version": "4.6.1",
   "description": "generator async control flow goodness",
   "keywords": [
     "async",
@@ -31,5 +31,8 @@
   "engines": {
     "iojs": ">= 1.0.0",
     "node": ">= 0.12.0"
+  },
+  "dependencies": {
+    "redux-saga": "^0.12.0"
   }
 }

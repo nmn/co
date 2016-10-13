@@ -1,10 +1,17 @@
-# co
+# co-effects
 
-[![Gitter][gitter-image]][gitter-url]
-[![NPM version][npm-image]][npm-url]
-[![Build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![Downloads][downloads-image]][downloads-url]
+  A fork of co with additional support for the following effects from `redux-saga`
+
+  * call - A way to yield a function with it's arguments and letting the runner
+  call it for you.
+
+  * cps - A way to yield a Node-style function that takes an error-first callback
+
+  * race - A way to use Promise.race with yieldables inside.
+
+### I will try to keep up to date with co itself
+
+# co
 
   Generator based control flow goodness for nodejs and the browser,
   using promises, letting you write non-blocking code in a nice-ish way.
